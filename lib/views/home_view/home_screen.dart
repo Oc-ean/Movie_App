@@ -8,12 +8,12 @@ import 'package:movie_app/views/home_view/home_view.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends ConsumerWidget {
-  HomeScreen({super.key});
+  HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AppModel appModel = ref.watch(appNotifierProvider);
-    final MovieNotifier movieNotifier = ref.watch(appNotifierProvider.notifier);
+    final appModel = ref.watch(appNotifierProvider);
+    final movieNotifier = ref.read(appNotifierProvider.notifier);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

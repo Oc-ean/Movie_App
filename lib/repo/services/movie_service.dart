@@ -1,25 +1,20 @@
-import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/repo/repo.dart';
 
 class MovieService {
-  final GetIt getIt = GetIt.instance;
+  final HttpService httpService;
 
-  late HttpService _httpService;
-  MovieService() {
-    _httpService = getIt<HttpService>();
-  }
+  MovieService(this.httpService);
 
   Future<List<MovieModel>?> getPopularMovies({int? page}) async {
-    Response? response = await _httpService.get('/movie/popular', query: {
-      'page': page,
+    final response = await httpService.get('/movie/popular', query: {
+      'page': page.toString(), // Convert page to string
     });
-    if (response!.statusCode == 200) {
-      Map data = response.data;
-      List<MovieModel>? movieModel =
+    if (response?.statusCode == 200) {
+      final data = response!.data;
+      final List<MovieModel> movieModel =
           data['results'].map<MovieModel>((movieData) {
-        return MovieModel.fromJson(movieData);
+        return MovieModel.fromJson(movieData, httpService.movieConfig);
       }).toList();
       return movieModel;
     } else {

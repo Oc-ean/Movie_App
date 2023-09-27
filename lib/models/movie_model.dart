@@ -1,4 +1,3 @@
-import 'package:get_it/get_it.dart';
 import 'package:movie_app/models/models.dart';
 
 class MovieModel {
@@ -10,6 +9,8 @@ class MovieModel {
   final String backDropPath;
   final num rating;
   final String releaseDate;
+  final MovieConfig movieConfig; // Pass MovieConfig as an argument
+
   MovieModel({
     required this.name,
     required this.language,
@@ -19,9 +20,11 @@ class MovieModel {
     required this.backDropPath,
     required this.rating,
     required this.releaseDate,
+    required this.movieConfig, // Require MovieConfig in the constructor
   });
 
-  factory MovieModel.fromJson(Map<String, dynamic> json) {
+  factory MovieModel.fromJson(
+      Map<String, dynamic> json, MovieConfig movieConfig) {
     return MovieModel(
       name: json['title'],
       language: json['original_language'],
@@ -31,10 +34,11 @@ class MovieModel {
       backDropPath: json['backdrop_path'],
       rating: json['vote_average'],
       releaseDate: json['release_date'],
+      movieConfig: movieConfig, // Pass movieConfig to the constructor
     );
   }
+
   String posterUrl() {
-    final MovieConfig movieConfig = GetIt.instance.get<MovieConfig>();
     return '${movieConfig.BASE_IMAGE_API_URL}$posterPath';
   }
 }

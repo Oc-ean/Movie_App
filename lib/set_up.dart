@@ -1,60 +1,41 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get_it/get_it.dart';
-import 'package:movie_app/models/models.dart';
-import 'package:movie_app/repo/repo.dart';
-import 'package:movie_app/views/views.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_app/constant/providers.dart';
 
-class SetupScreen extends StatefulWidget {
-  const SetupScreen({super.key});
+import 'views/home_view/home_view.dart';
+import 'views/splash_view/splash_view.dart';
 
-  @override
-  _SetupScreenState createState() => _SetupScreenState();
-}
-
-class _SetupScreenState extends State<SetupScreen> {
-  bool _isSetupComplete = false;
+class SetupScreen extends ConsumerWidget {
+  const SetupScreen({Key? key}) : super(key: key);
 
   @override
-  void initState() {
-    super.initState();
-    _setUp();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool _isSetupComplete = false;
 
-  Future<void> _setUp() async {
-    final getIt = GetIt.instance;
-    final configFile = await rootBundle.loadString('assets/config/main.json');
-    final configData = jsonDecode(configFile);
-    getIt.registerSingleton<MovieConfig>(
-      MovieConfig(
-        BASE_API_URL: configData['BASE_API_URL'],
-        BASE_IMAGE_API_URL: configData['BASE_IMAGE_API_URL'],
-        API_KEY: configData['API_KEY'],
-        ACCESS_TOKEN: configData['ACCESS_TOKEN'],
-      ),
+    final movieConfigAsync = ref.watch(movieConfigProvider);
+
+    return movieConfigAsync.when(
+      data: (movieConfig) {
+        final httpService = ref.read(httpServiceProvider);
+        final movieService = ref.read(movieServiceProvider);
+
+        Future.delayed(const Duration(milliseconds: 700), () {
+          _isSetupComplete = true;
+          if (_isSetupComplete) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => HomeScreen()),
+            );
+          }
+        });
+
+        return _isSetupComplete ? const SizedBox() : SplashScreen();
+      },
+      loading: () {
+        return SplashScreen();
+      },
+      error: (error, stackTrace) {
+        return Text('Error: $error');
+      },
     );
-
-    getIt.registerSingleton<HttpService>(
-      HttpService(),
-    );
-    getIt.registerSingleton<MovieService>(
-      MovieService(),
-    );
-
-    await Future.delayed(const Duration(milliseconds: 700));
-
-    setState(() {
-      _isSetupComplete = true;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ));
-    return _isSetupComplete ? HomeScreen() : SplashScreen();
   }
 }

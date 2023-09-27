@@ -1,36 +1,32 @@
 import 'package:dio/dio.dart';
-import 'package:get_it/get_it.dart';
 import 'package:movie_app/models/models.dart';
 
 class HttpService {
-  final Dio dio = Dio();
-  final GetIt getIt = GetIt.instance;
+  final MovieConfig movieConfig;
 
-  String? _baseUrl;
-  String? _apiKey;
+  HttpService(this.movieConfig);
 
-  HttpService() {
-    MovieConfig _config = getIt.get<MovieConfig>();
-    _baseUrl = _config.BASE_API_URL;
-    _apiKey = _config.API_KEY;
-  }
   Future<Response?> get(String _path, {Map<String, dynamic>? query}) async {
     try {
-      String _url = '$_baseUrl$_path';
-      Map<String, dynamic> _query = {
-        'api_key': _apiKey,
+      final _url = '${movieConfig.BASE_API_URL}$_path';
+
+      final Map<String, String> _query = {
+        'api_key': movieConfig.API_KEY,
         'language': 'en-US',
       };
-      if (query != null) {
-        _query.addAll(query);
-      }
-      final response = await dio.get(_url, queryParameters: _query);
-      print('Response: ${response.data}');
 
+      if (query != null) {
+        query.forEach((key, value) {
+          _query[key] = value.toString(); // Convert dynamic values to strings
+        });
+      }
+
+      final response = await Dio().get(_url, queryParameters: _query);
+      print('Response: ${response.data}');
       return response;
-    } on DioException catch (e) {
+    } on DioError catch (e) {
       print('Unable to perform get request');
-      print('DioError : $e');
+      print('DioError: $e');
       print('Response: ${e.response?.data}');
       rethrow;
     }
