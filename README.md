@@ -1,16 +1,19 @@
-# movie_app
+# Movie_app
+This a basic movie app , displaying data from api , using riverpod for statemanagent, to get api key visit : https://www.themoviedb.org/ , note you have to sign up to get api key.
 
-A new Flutter project.
+## Packages
+ * flutter_riverpod
+ * cached_network_image
+ * shimmer
+ * flutter_rating_bar
+ * dio
+ * get_it
 
-## Getting Started
+## ScreenShots
 
-This project is a starting point for a Flutter application.
+<img src="screenshots/slash_image.png" width="200"/>        <img src="screenshots/home.png" width="200"/>
 
-A few resources to get you started if this is your first Flutter project:
+<img src="screenshots/movie_details.png" width="200"/>   
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🤓 Author(s)
+**Micheal Olatunbosun**
