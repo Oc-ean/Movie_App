@@ -11,7 +11,9 @@ This a basic movie app , displaying data from api , using riverpod for statemana
 
 ## ScreenShots
 
-<img src="screenshots/slash_image.png" width="200"/>        <img src="screenshots/home.png" width="200"/>
+<img src="screenshots/splash_image.png" width="200"/>   
+
+<img src="screenshots/home.png" width="200"/>
 
 <img src="screenshots/movie_details.png" width="200"/>   
 
