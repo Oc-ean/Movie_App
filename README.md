@@ -7,7 +7,7 @@ This a basic movie app , displaying data from api , using riverpod for statemana
  * shimmer
  * flutter_rating_bar
  * dio
- * get_it
+   
 
 ## ScreenShots
 
